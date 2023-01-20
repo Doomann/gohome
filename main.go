@@ -3,38 +3,25 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/Doomann/gohome/controllers"
 )
 
 const (
-	apiPort = ":8888"
-	test = iota
-	ziurek = "krabas"
-	kas = iota
-	cia = iota
-	bus = iota
+	apiPort = 8888
+	number  = iota
 )
 
-type bandomLaime struct {
-	sitasNumeris int
-	nuCiaString  string
+func main() {
+	startWebServer(apiPort)
 }
 
-func main() {
-	
-	http.HandleFunc("/joke", func(w http.ResponseWriter, r *http.Request) {
-		joke := getJoke()
-		fmt.Fprint(w, joke)	
-	})
-		
-	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-		grazinsimSita := bandomLaime{cia, ziurek}
-		stringas := fmt.Sprintf("kodel iota visada buna kitoks? %d", bus)
+func startWebServer(port int) (int, error) {
+	fmt.Println("Starting server...")
+	controllers.RegisterControllers()
 
-		fmt.Println(stringas)
-		fmt.Fprint(w, grazinsimSita)	
-	})
+	fmt.Println("Server is up n runnin' on port", port)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 
-	fmt.Println("Servakas up n runnin...")
-	http.ListenAndServe(apiPort, nil)
-
+	return port, nil
 }
